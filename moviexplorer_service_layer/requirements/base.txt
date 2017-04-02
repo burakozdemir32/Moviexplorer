@@ -1,0 +1,12 @@
+#Django
+django==1.10.5
+djangorestframework==3.6.2
+markdown==2.6.8
+django-filter==1.0.2
+
+#Movie APIs
+tmdbsimple==1.5.0
+omdb==0.7.0
+
+#PostgreSQL Connection
+psycopg2==2.6.2
