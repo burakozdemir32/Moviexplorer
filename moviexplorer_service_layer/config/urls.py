@@ -17,15 +17,20 @@ from django.contrib import admin
 from django.conf.urls import url, include
 
 from rest_framework import routers
+from rest_framework.schemas import get_schema_view
 
 from api_root.views import MovieViewSet
 
 
+schema_view = get_schema_view(title='Moviexplorer API')
+
 router = routers.DefaultRouter()
 router.register(r'movies', MovieViewSet)
+
 
 urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^api/schema/$', schema_view)
 ]

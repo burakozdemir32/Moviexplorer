@@ -6,6 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var core_1 = require("@angular/core");
+var movie_service_1 = require("./services/movie.service");
 var AppComponent = (function () {
     function AppComponent() {
     }
@@ -15,7 +16,8 @@ AppComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
         selector: 'app-cmp',
-        templateUrl: 'app.component.html'
+        templateUrl: 'app.component.html',
+        providers: [movie_service_1.MovieService]
     })
 ], AppComponent);
 exports.AppComponent = AppComponent;
