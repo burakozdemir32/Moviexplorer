@@ -1,4 +1,4 @@
-#!c:\users\hexabones\desktop\moviexplorer_virtual_environment\scripts\python.exe
+#!c:\users\hexabones\desktop\moviexplorer\moviexplorer_virtual_environment\scripts\python.exe
 from django.core import management
 
 if __name__ == "__main__":

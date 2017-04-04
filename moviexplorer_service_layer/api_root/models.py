@@ -3,7 +3,7 @@ from django.contrib.postgres.fields import ArrayField
 
 
 class MovieRatings(models.Model):
-    rating_id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     movie = models.OneToOneField('Movie', on_delete=models.CASCADE)
     imdb_votes = models.IntegerField(null=True, blank=True)
     imdb_rating = models.FloatField(null=True, blank=True)
@@ -33,7 +33,7 @@ class Movie(models.Model):
     keywords = ArrayField(models.CharField(max_length=150), null=True,
                           blank=True)
     certification = models.CharField(max_length=30, null=True, blank=True)
-    title = models.CharField(max_length=150, null=True, blank=True)
+    title = models.CharField(max_length=200, null=True, blank=True)
     spoken_languages = ArrayField(models.CharField(max_length=30), null=True,
                                   blank=True)
     production_countries = ArrayField(models.CharField(max_length=40),
@@ -41,7 +41,7 @@ class Movie(models.Model):
     tagline = models.TextField(null=True, blank=True)
     backdrop_path = models.CharField(max_length=100, null=True, blank=True)
     release_date = models.DateField(null=True, blank=True)
-    original_title = models.CharField(max_length=150, null=True, blank=True)
+    original_title = models.CharField(max_length=200, null=True, blank=True)
     runtime = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
@@ -52,7 +52,7 @@ class Movie(models.Model):
 
 class Person(models.Model):
     id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=160, null=True, blank=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
     biography = models.TextField(null=True, blank=True)
     person_image_path = models.CharField(max_length=100, null=True, blank=True)
 

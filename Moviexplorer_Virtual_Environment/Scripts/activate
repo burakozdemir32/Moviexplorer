@@ -40,7 +40,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="$(if [ "$OSTYPE" "==" "cygwin" ]; then cygpath -u 'C:\Users\Hexabones\Desktop\Moviexplorer_Virtual_Environment'; else echo '/C/Users/Hexabones/Desktop/Moviexplorer_Virtual_Environment'; fi;)"
+VIRTUAL_ENV="$(if [ "$OSTYPE" "==" "cygwin" ]; then cygpath -u 'C:\Users\Hexabones\Desktop\Moviexplorer\moviexplorer_virtual_environment'; else echo '/C/Users/Hexabones/Desktop/Moviexplorer/moviexplorer_virtual_environment'; fi;)"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

@@ -1,5 +1,5 @@
 @echo off
-set "VIRTUAL_ENV=C:\Users\Hexabones\Desktop\Moviexplorer_Virtual_Environment"
+set "VIRTUAL_ENV=C:\Users\Hexabones\Desktop\Moviexplorer\moviexplorer_virtual_environment"
 
 if defined _OLD_VIRTUAL_PROMPT (
     set "PROMPT=%_OLD_VIRTUAL_PROMPT%"
@@ -9,7 +9,7 @@ if defined _OLD_VIRTUAL_PROMPT (
     )
     set "_OLD_VIRTUAL_PROMPT=%PROMPT%"
 )
-set "PROMPT=(Moviexplorer_Virtual_Environment) %PROMPT%"
+set "PROMPT=(moviexplorer_virtual_environment) %PROMPT%"
 
 REM Don't use () to avoid problems with them in %PATH%
 if defined _OLD_VIRTUAL_PYTHONHOME goto ENDIFVHOME

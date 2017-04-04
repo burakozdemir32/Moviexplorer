@@ -6,12 +6,12 @@ from rest_framework import serializers
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
-        fields = '__all__'
+        exclude = ('id',)
 
 
 class MovieRatingsSerializer(serializers.ModelSerializer):
-    movie = MovieSerializer()
+    movie = MovieSerializer(read_only=True)
 
     class Meta:
         model = MovieRatings
-        fields = '__all__'
+        exclude = ('rating_id',)

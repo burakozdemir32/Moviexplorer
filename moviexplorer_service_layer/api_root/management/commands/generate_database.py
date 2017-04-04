@@ -21,6 +21,12 @@ class Command(BaseCommand):
 
     @staticmethod
     def get_person_information(person_list):
+        """Creates relations between movies and actors, if any.
+
+        :param person_list: Person list of a movie.
+        :raises ReadTimeout: If the request does not response in 10 seconds.
+                HTTPError: If person does not found. (Via main function)
+        """
         person_info_list = []
 
         for person_id in person_list:
@@ -71,13 +77,13 @@ class Command(BaseCommand):
         Initial movie id for the loop below.
         If the command fails, change it with latest saved movie id + 1.
         '''
-        movie_id = 0
+        movie_id = 147965
         # Gets the latest movie in TMDB.
         latest_movie_id = movie.latest(timeout=10)['id']
         # The maximum actor count is 10.
         max_cast_count = 10
 
-        while movie_id <= latest_movie_id:
+        while movie_id <= 147965:
             # Declarations of arrays that manipulated below.
             genres = []
             keywords = []
@@ -111,8 +117,14 @@ class Command(BaseCommand):
                         continue
 
                     # Queries OMDB information by 'imdb_id'.
-                    omdb_info = omdb.imdbid(imdb_id, timeout=10,
-                                            tomatoes=True)
+                    try:
+                        omdb_info = omdb.imdbid(imdb_id, timeout=10,
+                                                tomatoes=True)
+                    except json.decoder.JSONDecodeError:
+                        movie_id += 1
+                        continue
+                    # Imdb id should be an integer for the database.
+                    imdb_id = int(imdb_id.replace('tt', ''))
                 # Handles Read Timeout Error.
                 except request_exceptions.ReadTimeout:
                     print('HTTP Read Timeout occurred.')
@@ -162,7 +174,11 @@ class Command(BaseCommand):
                 # Gets the certification for The United States.
                 for cert_info in tmdb_info['releases']['countries']:
                     if cert_info['iso_3166_1'].upper() == 'US':
-                        certification = cert_info['certification']
+                        if cert_info['certification'] in ['Approved', 'G',
+                                                          'NC-17', 'NR',
+                                                          'PG', 'PG-13',
+                                                          'R', 'UR']:
+                            certification = cert_info['certification']
 
                 '''
                 Some fields in returned API calls have more than one object.
@@ -192,25 +208,10 @@ class Command(BaseCommand):
 
                 # This statement guarantees atomicity of the database.
                 with transaction.atomic():
-                    # Creates and saves a rating object to database.
-                    rating = MovieRatings.objects.create(
-                        imdb_id=tmdb_info['imdb_id'],
-                        imdb_rating=omdb_info['imdb_rating'],
-                        imdb_votes=omdb_info['imdb_votes'],
-                        metascore=omdb_info['metascore'],
-                        tomato_meter=omdb_info['tomato_meter'],
-                        tomato_user_meter=omdb_info['tomato_user_meter'],
-                        tomato_user_reviews=omdb_info['tomato_user_reviews'],
-                        tomato_reviews=omdb_info['tomato_reviews'],
-                        tmdb_vote_count=tmdb_info['vote_count'],
-                        tmdb_vote_average=tmdb_info['vote_average'],
-                        average_rating=average_rating
-                    )
-
                     # Creates and saves a movie object to database.
-                    Movie.objects.create(
+                    movie = Movie.objects.create(
                         id=movie_id,
-                        rating=rating,
+                        imdb_id=imdb_id,
                         budget=tmdb_info['budget'],
                         revenue=tmdb_info['revenue'],
                         poster_path=tmdb_info['poster_path'],
@@ -227,50 +228,70 @@ class Command(BaseCommand):
                         original_title=tmdb_info['original_title'],
                         runtime=tmdb_info['runtime'],
                     )
-
-                    # Creates relations between movies and actors.
-                    cast_info = Command.get_person_information(cast)
-
-                    for actor in cast_info:
-                        try:
-                            Person.objects.create(
-                                id=actor['id'],
-                                name=actor['name'],
-                                biography=actor['biography'],
-                                person_image_path=actor['profile_path']
-                            )
-                        except IntegrityError:
-                            print('Person already exists. Id: {}'.format(
-                                actor['id'])
-                            )
-
-                        MovieActorIndex.objects.create(
-                            actor_id=actor['id'],
-                            movie_id=movie_id
-                        )
-
-                    # Creates relations between movies and directors.
-                    crew_info = Command.get_person_information(crew)
-
-                    for director in crew_info:
-                        try:
-                            Person.objects.create(
-                                id=director['id'],
-                                name=director['name'],
-                                biography=director['biography'],
-                                person_image_path=director['profile_path']
-                            )
-                        except IntegrityError:
-                            print('Person already exists. Id: {}'.format(
-                                director['id'])
-                            )
-
-                        MovieDirectorIndex.objects.create(
-                            director_id=director['id'],
-                            movie_id=movie_id
-                        )
-
+                    # Creates and saves a rating object to database.
+                    MovieRatings.objects.create(
+                        movie=movie,
+                        imdb_rating=omdb_info['imdb_rating'],
+                        imdb_votes=omdb_info['imdb_votes'],
+                        metascore=omdb_info['metascore'],
+                        tomato_meter=omdb_info['tomato_meter'],
+                        tomato_user_meter=omdb_info['tomato_user_meter'],
+                        tomato_user_reviews=omdb_info['tomato_user_reviews'],
+                        tomato_reviews=omdb_info['tomato_reviews'],
+                        tmdb_vote_count=tmdb_info['vote_count'],
+                        tmdb_vote_average=tmdb_info['vote_average'],
+                        average_rating=average_rating
+                    )
                 print('Latest saved movie id: {}'.format(movie_id))
+
+                cast_info = Command.get_person_information(cast)
+
+                # TODO These lines below should be in a function.
+                # Creates relations between movies and actors.
+                for actor in cast_info:
+                    try:
+                        Person.objects.create(
+                            id=actor['id'],
+                            name=actor['name'],
+                            biography=actor['biography'],
+                            person_image_path=actor['profile_path']
+                        )
+                        print('Latest saved person id: {}'.format(actor['id']))
+                    except IntegrityError:
+                        print('Person already exists. Id: {}'.format(
+                            actor['id'])
+                        )
+
+                    MovieActorIndex.objects.create(
+                        actor_id=actor['id'],
+                        movie_id=movie_id
+                    )
+
+                crew_info = Command.get_person_information(crew)
+
+                # TODO These lines below should be in a function as well.
+                # Creates relations between movies and directors.
+                for director in crew_info:
+                    try:
+                        Person.objects.create(
+                            id=director['id'],
+                            name=director['name'],
+                            biography=director['biography'],
+                            person_image_path=director['profile_path']
+                        )
+                        print('Latest saved person id: {}'.format(
+                            director['id'])
+                        )
+                    except IntegrityError:
+                        print('Person already exists. Id: {}'.format(
+                            director['id'])
+                        )
+
+                    MovieDirectorIndex.objects.create(
+                        director_id=director['id'],
+                        movie_id=movie_id
+                    )
+
                 movie_id += 1
             # Handles 404 Not Found Error.
             except request_exceptions.HTTPError:
