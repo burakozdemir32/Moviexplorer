@@ -74,16 +74,20 @@ class Command(BaseCommand):
         # Creates a TMDB movie object.
         movie = tmdb.Movies()
         '''
-        Initial movie id for the loop below.
-        If the command fails, change it with latest saved movie id + 1.
+        Gets the latest movie id from the database.
+        If there is not any movie in the database, initial movie id will be 0.
         '''
-        movie_id = 147965
+        try:
+            movie_id = Movie.objects.latest('id').id
+        except IntegrityError:
+            movie_id = 0
+
         # Gets the latest movie in TMDB.
         latest_movie_id = movie.latest(timeout=10)['id']
         # The maximum actor count is 10.
         max_cast_count = 10
 
-        while movie_id <= 147965:
+        while movie_id <= latest_movie_id:
             # Declarations of arrays that manipulated below.
             genres = []
             keywords = []
