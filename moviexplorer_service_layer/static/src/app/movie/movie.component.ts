@@ -7,7 +7,14 @@ import { MovieService } from '../services/movie.service';
     templateUrl: 'movie.component.html'
 })
 export class MovieComponent  {
+    topMovieList: Array<Object>;
+
     constructor(private movieService: MovieService) {
+        this.movieService.getTopMovies().subscribe( res => {
+            this.topMovieList = res.results;
+            console.log(res.results)
+        })
 
     }
 }
+

@@ -14,4 +14,4 @@ class MovieRatingsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MovieRatings
-        exclude = ('rating_id',)
+        exclude = ('id',)

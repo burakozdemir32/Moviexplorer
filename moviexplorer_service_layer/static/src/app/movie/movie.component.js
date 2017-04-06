@@ -12,7 +12,12 @@ var core_1 = require("@angular/core");
 var movie_service_1 = require("../services/movie.service");
 var MovieComponent = (function () {
     function MovieComponent(movieService) {
+        var _this = this;
         this.movieService = movieService;
+        this.movieService.getTopMovies().subscribe(function (res) {
+            _this.topMovieList = res.results;
+            console.log(res.results);
+        });
     }
     return MovieComponent;
 }());

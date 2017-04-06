@@ -14,10 +14,12 @@ require("rxjs/Rx");
 var MovieService = (function () {
     function MovieService(jsonp) {
         this.jsonp = jsonp;
-        console.log('MovieService Initialised...');
+        this.apiURL = 'http://127.0.0.1:8000/api/movies?callback=JSONP_CALLBACK';
+        console.log('Movie service initialised.');
     }
     MovieService.prototype.getTopMovies = function () {
-        this.jsonp.get('');
+        return this.jsonp.get(this.apiURL)
+            .map(function (res) { return res.json(); });
     };
     return MovieService;
 }());
