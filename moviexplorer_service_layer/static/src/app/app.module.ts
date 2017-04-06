@@ -4,11 +4,13 @@ import { HttpModule, JsonpModule } from '@angular/http';
 
 import { TruncatePipe } from './pipes/text-truncate.pipe';
 
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+
 import { AppComponent }  from './app.component';
 import { MovieComponent }  from './movie/movie.component';
 
 @NgModule({
-  imports:      [ BrowserModule, HttpModule, JsonpModule ],
+  imports:      [ BrowserModule, HttpModule, JsonpModule, SlimLoadingBarModule.forRoot() ],
   declarations: [ AppComponent, MovieComponent, TruncatePipe],
   bootstrap:    [ AppComponent ]
 })

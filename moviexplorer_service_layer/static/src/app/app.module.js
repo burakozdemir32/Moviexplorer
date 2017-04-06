@@ -9,6 +9,7 @@ var core_1 = require("@angular/core");
 var platform_browser_1 = require("@angular/platform-browser");
 var http_1 = require("@angular/http");
 var text_truncate_pipe_1 = require("./pipes/text-truncate.pipe");
+var ng2_slim_loading_bar_1 = require("ng2-slim-loading-bar");
 var app_component_1 = require("./app.component");
 var movie_component_1 = require("./movie/movie.component");
 var AppModule = (function () {
@@ -18,7 +19,7 @@ var AppModule = (function () {
 }());
 AppModule = __decorate([
     core_1.NgModule({
-        imports: [platform_browser_1.BrowserModule, http_1.HttpModule, http_1.JsonpModule],
+        imports: [platform_browser_1.BrowserModule, http_1.HttpModule, http_1.JsonpModule, ng2_slim_loading_bar_1.SlimLoadingBarModule.forRoot()],
         declarations: [app_component_1.AppComponent, movie_component_1.MovieComponent, text_truncate_pipe_1.TruncatePipe],
         bootstrap: [app_component_1.AppComponent]
     })

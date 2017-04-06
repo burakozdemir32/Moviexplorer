@@ -12,6 +12,7 @@
     map: {
       // our app is within the app folder
       'app': 'app',
+      'ng2-slim-loading-bar': 'node_modules/ng2-slim-loading-bar/bundles/index.umd.js',
 
       // angular bundles
       '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
