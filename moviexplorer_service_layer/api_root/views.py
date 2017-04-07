@@ -10,13 +10,20 @@ class MovieViewSet(viewsets.ReadOnlyModelViewSet):
     This endpoint presents top movie informations.
     """
     renderer_classes = (JSONPRenderer,)
-
-    queryset = MovieRatings.objects.filter(
-        imdb_votes__gte=1000,
-        tomato_user_reviews__gte=1000,
-        tomato_reviews__gte=1
-    ).order_by('-average_rating')[:500]
     serializer_class = MovieRatingsSerializer
 
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+        queryset = MovieRatings.objects.all()\
+            .order_by('-average_rating')\
+            .exclude(average_rating=None)
+
+        title = self.request.query_params.get('title', None)
+        if title is not None:
+            queryset = queryset.filter(movie__title__icontains=title)
+        return queryset
 
 

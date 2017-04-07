@@ -25,8 +25,7 @@ from api_root.views import MovieViewSet
 schema_view = get_schema_view(title='Moviexplorer API')
 
 router = routers.DefaultRouter()
-router.register(r'movies', MovieViewSet)
-
+router.register(r'movies', MovieViewSet, base_name='movies')
 
 urlpatterns = [
     url(r'^api/', include(router.urls)),

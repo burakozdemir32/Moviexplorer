@@ -19,7 +19,7 @@ export class MovieComponent  {
         this.movieService.getTopMovies().subscribe( res => {
             this.topMovieList = res.results;
         }, (error: any) => {
-            console.log('Error occured while fetching movies.')
+            console.log(error)
         }, () => {
             this.slimLoader.complete();
         });

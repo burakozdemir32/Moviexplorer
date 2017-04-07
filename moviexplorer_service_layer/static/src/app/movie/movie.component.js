@@ -22,7 +22,7 @@ var MovieComponent = (function () {
         this.movieService.getTopMovies().subscribe(function (res) {
             _this.topMovieList = res.results;
         }, function (error) {
-            console.log('Error occured while fetching movies.');
+            console.log(error);
         }, function () {
             _this.slimLoader.complete();
         });
