@@ -1,6 +1,23 @@
+<div class="me-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="me-search">
+                    <form (ngSubmit)="searchMovie(movie_search_box.value)">
+                        <input #movie_search_box type="search" class="me-search-input" placeholder="Search movies">
+                        <button type="submit" class="me-search-button">
+                            <span class="hidden-xs">Search</span>
+                            <i class="fa fa-search visible-xs-inline"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container">
     <div class="row-eq-height">
-        <div class="col-sm-6 col-xs-6 movie-card-view" *ngFor="let movie of topMovieList">
+        <div class="col-sm-6 col-xs-6 movie-card-view" *ngFor="let movie of movieSearchResults">
             <div class="list">
                 <div class="list-header">
                     <a href="#" class="list-header-image">

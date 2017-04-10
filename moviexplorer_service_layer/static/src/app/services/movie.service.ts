@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Jsonp } from '@angular/http';
+import { Jsonp, URLSearchParams } from '@angular/http';
 import 'rxjs/Rx';
 
 @Injectable()
@@ -13,6 +13,16 @@ export class MovieService{
     getTopMovies() {
         return this.jsonp.get(this.apiURL)
             .map(res => res.json());
+    }
+
+    searchMovie(title: string) {
+        let search = new URLSearchParams();
+        search.set('action', 'opensearch');
+        search.set('title', title);
+
+        return this.jsonp.get(this.apiURL, {search})
+            .map(res => res.json());
+
     }
 
 }

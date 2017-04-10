@@ -21,6 +21,13 @@ var MovieService = (function () {
         return this.jsonp.get(this.apiURL)
             .map(function (res) { return res.json(); });
     };
+    MovieService.prototype.searchMovie = function (title) {
+        var search = new http_1.URLSearchParams();
+        search.set('action', 'opensearch');
+        search.set('title', title);
+        return this.jsonp.get(this.apiURL, { search: search })
+            .map(function (res) { return res.json(); });
+    };
     return MovieService;
 }());
 MovieService = __decorate([

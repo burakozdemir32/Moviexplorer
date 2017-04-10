@@ -20,7 +20,7 @@ class MovieViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = MovieRatings.objects.all()\
             .order_by('-average_rating')\
             .exclude(average_rating=None)
-
+    
         title = self.request.query_params.get('title', None)
         if title is not None:
             queryset = queryset.filter(movie__title__icontains=title)

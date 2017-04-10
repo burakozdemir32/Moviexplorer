@@ -11,21 +11,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var movie_service_1 = require("../services/movie.service");
 var ng2_slim_loading_bar_1 = require("ng2-slim-loading-bar");
+var Subject_1 = require("rxjs/Subject");
 var MovieComponent = (function () {
     function MovieComponent(movieService, slimLoader) {
         this.movieService = movieService;
         this.slimLoader = slimLoader;
+        this.title$ = new Subject_1.Subject();
     }
-    MovieComponent.prototype.ngOnInit = function () {
+    MovieComponent.prototype.searchMovie = function (title) {
         var _this = this;
         this.slimLoader.start();
-        this.movieService.getTopMovies().subscribe(function (res) {
-            _this.topMovieList = res.results;
-        }, function (error) {
-            console.log(error);
-        }, function () {
-            _this.slimLoader.complete();
-        });
+        this.movieService.searchMovie(title)
+            .subscribe(function (res) { return _this.movieSearchResults = res.results; }, function (error) { return console.log(error); }, function () { return _this.slimLoader.complete(); });
+    };
+    MovieComponent.prototype.ngOnInit = function () {
     };
     return MovieComponent;
 }());
