@@ -73,16 +73,6 @@ body {
 .me-search-button:focus {
     background: #F78080;
 }
-/* small devices */
-@media (max-width: 767px) {
-    .me-search-input {
-        padding: 2rem;
-        width: calc(100% - 6rem);
-    }
-    .me-search-button {
-        width: 6rem;
-    }
-}
 .movie-card-view {
     margin-bottom: 15px;
 }
@@ -135,20 +125,20 @@ a.text-black:focus, a.text-black:hover {
 }
 .list-content {
     display: block;
-    height: 278px;
+    height: 100%;
     margin-left: 35%;
-    padding: 15px;
+    padding: 5px;
     color: #000;
 }
 .list-meta {
     display: block;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     font-size: 16px;
     line-height: 100%;
 }
 .list-meta .list-meta-item {
     display: inline-block;
-    margin-right: 18px;
+    margin-right: 10px;
     color: #666;
 }
 .rating-icon {
@@ -177,30 +167,14 @@ a.text-black:focus, a.text-black:hover {
 }
 .movie-overview {
     color: #4d4d4d;
+    font-size: 16px;
+    margin: 0px;
 }
 .view-more {
     border-top: 1px solid #eee;
     position: absolute;
     bottom: 0px;
     margin: 0px;
-}
-@media only screen and (max-width: 991px) {
-    .list-header {
-        display: block;
-        width: 100%;
-        padding: 0;
-        border-radius: 0;
-    }
-    .list-content {
-        display: block;
-        width: 100%;
-        margin-left: 0;
-        padding: 15px;
-        clear: both;
-    }
-    .movie-overview{
-        display: none;
-    }
 }
 .slim-loading-bar {
     position: fixed;
@@ -211,7 +185,6 @@ a.text-black:focus, a.text-black:hover {
     right: 0;
     z-index: 99999;
 }
-
 /* Styling for the Slim Loading Progress Bar itself */
 .slim-loading-bar-progress {
     margin: 0;
@@ -228,4 +201,48 @@ a.text-black:focus, a.text-black:hover {
     -moz-transition: all 0.5s ease-in-out;
     -o-transition: all 0.5s ease-in-out;
     transition: all 0.5s ease-in-out;
+}
+/* Media queries */
+@media only screen and (max-width: 1199px) {
+    .movie-overview {
+        line-height: 1;
+        font-size: 14px;
+    }
+}
+@media only screen and (max-width: 991px) {
+    .movie-overview {
+        display: block;
+        font-size: 16px;
+        line-height: 1.42857143;
+    }
+    .list-header {
+        width: 35%;
+    }
+    .list-content {
+        margin-left: 35%;
+    }
+}
+@media (max-width: 767px) {
+    .me-search-input {
+        padding: 2rem;
+        width: calc(100% - 6rem);
+    }
+    .me-search-button {
+        width: 6rem;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .list-header {
+        width: 100%;
+    }
+    .list-content {
+        clear: both;
+        margin-left: 0px;
+        padding-bottom: 30px;
+    }
+}
+@media only screen and (max-width: 320px) {
+    .list-meta .list-meta-item {
+        margin-right: 8px;
+    }
 }
