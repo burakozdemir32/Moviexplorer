@@ -237,7 +237,7 @@ a.text-black:focus, a.text-black:hover {
     }
     .list-content {
         clear: both;
-        margin-left: 0px;
+        margin-left: 0;
         padding-bottom: 30px;
     }
 }

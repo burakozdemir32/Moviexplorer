@@ -80,3 +80,14 @@ class MovieActorIndex(models.Model):
         return 'Actor Id: {}, Movie Id: {}'.format(
             self.actor_id, self.movie_id
         )
+
+
+class UserRatings(models.Model):
+    user_id = models.IntegerField()
+    movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
+    rating = models.FloatField()
+
+    def __str__(self):
+        return 'User Id: {}, Movie Id: {}, Rating: {]'.format(
+            self.user_id, self.movie, self.rating
+        )
