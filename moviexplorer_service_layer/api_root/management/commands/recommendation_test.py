@@ -10,15 +10,21 @@ class Command(BaseCommand):
     help = 'Initialises spark based recommendation engine.'
 
     def handle(self, *args, **options):
+        # Adds spark home and the required jar file to the path.
         os.environ["SPARK_HOME"] = "C:\spark"
         os.environ["SPARK_CLASSPATH"] = "C:\spark\postgresql.jar"
+
+        # Database informations
+        db_url = "jdbc:postgresql://localhost:5432/" \
+                 "moviexplorer_service_layer?user=postgres&password=password"
+        db_table = "api_root_movieratings"
 
         sc = SparkContext("local[*]", "<JOBNAME>")
         sqlContext = SQLContext(sc)
 
         df = sqlContext.read.format('jdbc').options(
-            url="jdbc:postgresql://localhost:5432/moviexplorer_service_layer?user=postgres&password=password",
-            dbtable="api_root_movieratings", driver="org.postgresql.Driver"
+            url=db_url,
+            dbtable=db_table, driver="org.postgresql.Driver"
         ).load()
         a = df.count()
         print(a)
