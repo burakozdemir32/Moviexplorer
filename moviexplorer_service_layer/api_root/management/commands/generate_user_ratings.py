@@ -3,6 +3,7 @@ import csv
 import os
 # Django core imports.
 from django.core.management.base import BaseCommand
+from django.db import IntegrityError
 # Django app imports.
 from api_root.models import (UserRatings)
 
@@ -32,14 +33,25 @@ class Command(BaseCommand):
                     movie_id = links_dict[rating['movieId']]
 
                     if movie_id is not None and movie_id != '':
-                        UserRatings.objects.create(
-                            user_id=int(rating['userId']),
-                            movie_id=int(movie_id),
-                            rating=float(rating['rating'])
-                        )
-                        print('Latest saved rating with user id: {}'.format(
-                            rating['userId'])
-                        )
+                        try:
+                            UserRatings.objects.create(
+                                user_id=int(rating['userId']),
+                                movie_id=int(movie_id),
+                                rating=float(rating['rating'])
+                            )
+                            print(
+                                'Latest saved rating with User id: {}, '
+                                'Movie id: {}'.format(
+                                    rating['userId'], movie_id
+                                )
+                            )
+                        except IntegrityError:
+                            print(
+                                'User rating could not be saved. Movie id {} '
+                                'is not present in the movie table'.format(
+                                    movie_id
+                                )
+                            )
         except OSError:
             print("File not found.")
 

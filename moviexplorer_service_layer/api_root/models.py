@@ -18,7 +18,7 @@ class MovieRatings(models.Model):
 
     def __str__(self):
         return 'IMDb Id: {} Average Rating: {}'.format(
-            self.rating_id, self.average_rating
+            self.id, self.average_rating
         )
 
 
@@ -66,6 +66,9 @@ class MovieDirectorIndex(models.Model):
     director_id = models.IntegerField()
     movie_id = models.IntegerField()
 
+    class Meta:
+        unique_together = ('director_id', 'movie_id',)
+
     def __str__(self):
         return 'Director Id: {}, Movie Id: {}'.format(
             self.director_id, self.movie_id
@@ -75,6 +78,9 @@ class MovieDirectorIndex(models.Model):
 class MovieActorIndex(models.Model):
     actor_id = models.IntegerField()
     movie_id = models.IntegerField()
+
+    class Meta:
+        unique_together = ('actor_id', 'movie_id',)
 
     def __str__(self):
         return 'Actor Id: {}, Movie Id: {}'.format(
@@ -86,6 +92,9 @@ class UserRatings(models.Model):
     user_id = models.IntegerField()
     movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
     rating = models.FloatField()
+
+    class Meta:
+        unique_together = ('user_id', 'movie',)
 
     def __str__(self):
         return 'User Id: {}, Movie Id: {}, Rating: {]'.format(

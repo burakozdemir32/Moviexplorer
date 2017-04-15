@@ -17,7 +17,8 @@ from api_root.models import (Movie, MovieActorIndex, MovieDirectorIndex,
 
 
 class Command(BaseCommand):
-    help = 'Initialise the database for the Moviexplorer project'
+    help = "Initialises and keeps updated the database for " \
+           "the Moviexplorer project"
 
     @staticmethod
     def get_person_information(person_list):
@@ -210,43 +211,48 @@ class Command(BaseCommand):
                     if crew_info['job'] == 'Director':
                         crew.append(crew_info['id'])
 
-                # This statement guarantees atomicity of the database.
-                with transaction.atomic():
-                    # Creates and saves a movie object to database.
-                    movie = Movie.objects.create(
-                        id=movie_id,
-                        imdb_id=imdb_id,
-                        budget=tmdb_info['budget'],
-                        revenue=tmdb_info['revenue'],
-                        poster_path=tmdb_info['poster_path'],
-                        overview=tmdb_info['overview'],
-                        genres=genres,
-                        keywords=keywords,
-                        certification=certification,
-                        title=tmdb_info['title'],
-                        spoken_languages=spoken_languages,
-                        production_countries=prod_countries,
-                        tagline=tmdb_info['tagline'],
-                        backdrop_path=tmdb_info['backdrop_path'],
-                        release_date=release_date,
-                        original_title=tmdb_info['original_title'],
-                        runtime=tmdb_info['runtime'],
-                    )
-                    # Creates and saves a rating object to database.
-                    MovieRatings.objects.create(
-                        movie=movie,
-                        imdb_rating=omdb_info['imdb_rating'],
-                        imdb_votes=omdb_info['imdb_votes'],
-                        metascore=omdb_info['metascore'],
-                        tomato_meter=omdb_info['tomato_meter'],
-                        tomato_user_meter=omdb_info['tomato_user_meter'],
-                        tomato_user_reviews=omdb_info['tomato_user_reviews'],
-                        tomato_reviews=omdb_info['tomato_reviews'],
-                        tmdb_vote_count=tmdb_info['vote_count'],
-                        tmdb_vote_average=tmdb_info['vote_average'],
-                        average_rating=average_rating
-                    )
-                print('Latest saved movie id: {}'.format(movie_id))
+                try:
+                    # This statement guarantees atomicity of the database.
+                    with transaction.atomic():
+                        # Creates and saves a movie object to database.
+                        movie = Movie.objects.create(
+                            id=movie_id,
+                            imdb_id=imdb_id,
+                            budget=tmdb_info['budget'],
+                            revenue=tmdb_info['revenue'],
+                            poster_path=tmdb_info['poster_path'],
+                            overview=tmdb_info['overview'],
+                            genres=genres,
+                            keywords=keywords,
+                            certification=certification,
+                            title=tmdb_info['title'],
+                            spoken_languages=spoken_languages,
+                            production_countries=prod_countries,
+                            tagline=tmdb_info['tagline'],
+                            backdrop_path=tmdb_info['backdrop_path'],
+                            release_date=release_date,
+                            original_title=tmdb_info['original_title'],
+                            runtime=tmdb_info['runtime'],
+                        )
+                        # Creates and saves a rating object to database.
+                        MovieRatings.objects.create(
+                            movie=movie,
+                            imdb_rating=omdb_info['imdb_rating'],
+                            imdb_votes=omdb_info['imdb_votes'],
+                            metascore=omdb_info['metascore'],
+                            tomato_meter=omdb_info['tomato_meter'],
+                            tomato_user_meter=omdb_info['tomato_user_meter'],
+                            tomato_user_reviews=omdb_info['tomato_user_reviews'],
+                            tomato_reviews=omdb_info['tomato_reviews'],
+                            tmdb_vote_count=tmdb_info['vote_count'],
+                            tmdb_vote_average=tmdb_info['vote_average'],
+                            average_rating=average_rating
+                        )
+                    print('Latest saved movie id: {}'.format(movie_id))
+                except IntegrityError:
+                    print('Movie id {} already exists.'.format(movie_id))
+                    movie_id += 1
+                    continue
 
                 cast_info = Command.get_person_information(cast)
 
@@ -266,10 +272,24 @@ class Command(BaseCommand):
                             actor['id'])
                         )
 
-                    MovieActorIndex.objects.create(
-                        actor_id=actor['id'],
-                        movie_id=movie_id
-                    )
+                    try:
+                        MovieActorIndex.objects.create(
+                            actor_id=actor['id'],
+                            movie_id=movie_id
+                        )
+                        print(
+                            'Movie-actor index created. Movie id: {}, '
+                            'Actor id: {}'.format(
+                                movie_id, actor['id']
+                            )
+                        )
+                    except IntegrityError:
+                        print(
+                            'Movie-actor relation already exists. '
+                            'Movie id: {}, Actor id: {}'.format(
+                                movie_id, actor['id']
+                            )
+                        )
 
                 crew_info = Command.get_person_information(crew)
 
@@ -291,11 +311,24 @@ class Command(BaseCommand):
                             director['id'])
                         )
 
-                    MovieDirectorIndex.objects.create(
-                        director_id=director['id'],
-                        movie_id=movie_id
-                    )
-
+                    try:
+                        MovieDirectorIndex.objects.create(
+                            director_id=director['id'],
+                            movie_id=movie_id
+                        )
+                        print(
+                            'Movie-director index created. Movie id: {}, '
+                            'Director id: {}'.format(
+                                movie_id, director['id']
+                            )
+                        )
+                    except IntegrityError:
+                        print(
+                            'Movie-director relation already exists. '
+                            'Movie id: {}, Director id: {}'.format(
+                                movie_id, director['id']
+                            )
+                        )
                 movie_id += 1
             # Handles 404 Not Found Error.
             except request_exceptions.HTTPError:
