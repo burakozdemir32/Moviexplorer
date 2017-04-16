@@ -1,16 +1,13 @@
 # Built-in libraries.
 import json
 import os
-
 # Third-party libraries.
 import tmdbsimple as tmdb
 import omdb
 import requests.exceptions as request_exceptions
-
 # Django core imports.
 from django.core.management.base import BaseCommand
 from django.db import transaction, IntegrityError
-
 # Django app imports.
 from api_root.models import (Movie, MovieActorIndex, MovieDirectorIndex,
                              Person, MovieRatings)
@@ -40,6 +37,9 @@ class Command(BaseCommand):
                     person_info = person.info(
                         timeout=10
                     )
+                except request_exceptions.HTTPError:
+                    print('Person not found. Id: {}'.format(person_id))
+                    break
                 except request_exceptions.ReadTimeout:
                     print('HTTP Read Timeout occurred.')
                     continue
@@ -79,7 +79,7 @@ class Command(BaseCommand):
         If there is not any movie in the database, initial movie id will be 0.
         '''
         try:
-            movie_id = Movie.objects.latest('id').id
+            movie_id = Movie.objects.latest('id').id + 1
         except IntegrityError:
             movie_id = 0
 
@@ -129,7 +129,17 @@ class Command(BaseCommand):
                         movie_id += 1
                         continue
                     # Imdb id should be an integer for the database.
-                    imdb_id = int(imdb_id.replace('tt', ''))
+                    try:
+                        imdb_id = int(imdb_id.replace('tt', ''))
+                    except ValueError:
+                        print(
+                            'IMDB Id is not valid. Movie id: {}, '
+                            'IMDB id: {}'.format(
+                                movie_id, imdb_id
+                            )
+                        )
+                        movie_id += 1
+                        continue
                 # Handles Read Timeout Error.
                 except request_exceptions.ReadTimeout:
                     print('HTTP Read Timeout occurred.')
@@ -232,7 +242,7 @@ class Command(BaseCommand):
                             backdrop_path=tmdb_info['backdrop_path'],
                             release_date=release_date,
                             original_title=tmdb_info['original_title'],
-                            runtime=tmdb_info['runtime'],
+                            runtime=tmdb_info['runtime']
                         )
                         # Creates and saves a rating object to database.
                         MovieRatings.objects.create(
@@ -332,7 +342,7 @@ class Command(BaseCommand):
                 movie_id += 1
             # Handles 404 Not Found Error.
             except request_exceptions.HTTPError:
-                print('Object not found. Id: {}'.format(movie_id))
+                print('Movie not found. Id: {}'.format(movie_id))
                 movie_id += 1
 
         print('The database is up to date.')
