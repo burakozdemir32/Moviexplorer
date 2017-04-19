@@ -2,17 +2,17 @@
 Moviexplorer
 ##########
 
-**A different movie exploration and recommendation platform.**.
+A different movie exploration and recommendation platform.
 
 ********
-Requirements
+Developed with
 ********
 
-* Python 3
-* Django >= 1.10.5
-* Django Rest Framework >= 3.6.2
-* PostgreSQL 9.6 >=
-* Angular2
+* Python 3.6.0
+* Django 1.10.5
+* Django Rest Framework 3.6.2
+* PostgreSQL 9.6 
+* Angular2 4.0.0
 
 ********
 Quickstart
