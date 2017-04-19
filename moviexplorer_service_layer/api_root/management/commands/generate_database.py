@@ -252,7 +252,8 @@ class Command(BaseCommand):
                             metascore=omdb_info['metascore'],
                             tomato_meter=omdb_info['tomato_meter'],
                             tomato_user_meter=omdb_info['tomato_user_meter'],
-                            tomato_user_reviews=omdb_info['tomato_user_reviews'],
+                            tomato_user_reviews=omdb_info[
+                                'tomato_user_reviews'],
                             tomato_reviews=omdb_info['tomato_reviews'],
                             tmdb_vote_count=tmdb_info['vote_count'],
                             tmdb_vote_average=tmdb_info['vote_average'],

@@ -1,1 +1,0 @@
-@"c:\users\hexabones\desktop\moviexplorer_virtual_environment\scripts\python.exe" "c:\users\hexabones\desktop\moviexplorer_virtual_environment\Scripts\markdown_py" %*

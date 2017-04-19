@@ -25,8 +25,8 @@ class MovieRatings(models.Model):
 class Movie(models.Model):
     id = models.IntegerField(primary_key=True)
     imdb_id = models.IntegerField(null=True, blank=True)
-    budget = models.FloatField(null=True, blank=True)
-    revenue = models.FloatField(null=True, blank=True)
+    budget = models.BigIntegerField(null=True, blank=True)
+    revenue = models.BigIntegerField(null=True, blank=True)
     poster_path = models.CharField(max_length=100, null=True, blank=True)
     overview = models.TextField(null=True, blank=True)
     genres = ArrayField(models.CharField(max_length=30), null=True, blank=True)

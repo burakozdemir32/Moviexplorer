@@ -1,4 +1,4 @@
-from .models import Movie, MovieRatings, MovieActorIndex, MovieDirectorIndex, Person
+from .models import Movie, MovieRatings
 
 from rest_framework import serializers
 

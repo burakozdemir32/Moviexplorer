@@ -3,7 +3,7 @@ from .serializers import MovieRatingsSerializer
 
 from rest_framework import viewsets
 from rest_framework_jsonp.renderers import JSONPRenderer
-
+from rest_framework import permissions
 
 class MovieViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -11,6 +11,7 @@ class MovieViewSet(viewsets.ReadOnlyModelViewSet):
     """
     renderer_classes = (JSONPRenderer,)
     serializer_class = MovieRatingsSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def get_queryset(self):
         """
@@ -19,8 +20,8 @@ class MovieViewSet(viewsets.ReadOnlyModelViewSet):
         """
         queryset = MovieRatings.objects.all()\
             .order_by('-average_rating')\
-            .exclude(average_rating=None)
-    
+            .exclude(imdb_rating__gte=7)
+
         title = self.request.query_params.get('title', None)
         if title is not None:
             queryset = queryset.filter(movie__title__icontains=title)
