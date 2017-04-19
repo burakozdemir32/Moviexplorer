@@ -24,4 +24,4 @@ Quickstart
 	"pip install -r base.txt"
     4. Go to "static" folder, and run "npm install" command. Note that you should have NodeJS installed.
     5. Run "python manage.py generate_database" command to generate and fill your database.
-    5. In order to start the REST service, run "python manage.py runserver" command in the project folder, then run "npm start" command in the "static" folder.
+    6. In order to start the REST service, run "python manage.py runserver" command in the project folder, then run "npm start" command in the "static" folder.
