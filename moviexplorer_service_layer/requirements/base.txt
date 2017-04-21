@@ -1,3 +1,6 @@
+#Python
+psutil==5.2.2
+
 #Django
 django==1.10.5
 djangorestframework==3.6.2
@@ -5,6 +8,7 @@ markdown==2.6.8
 django-filter==1.0.2
 coreapi==2.3.0
 djangorestframework-jsonp==1.0.0
+
 #Movie APIs
 tmdbsimple==1.5.0
 omdb==0.7.0
