@@ -2,17 +2,17 @@
 Moviexplorer
 ##########
 
-**A different movie exploration and recommendation platform.**.
+A different movie exploration and recommendation platform.
 
 ********
-Requirements
+Developed with
 ********
 
-* Python 3
-* Django >= 1.10.5
-* Django Rest Framework >= 3.6.2
-* PostgreSQL 9.6 >=
-* Angular2
+* Python 3.6.0
+* Django 1.10.5
+* Django Rest Framework 3.6.2
+* PostgreSQL 9.6 
+* Angular2 4.0.0
 
 ********
 Quickstart
@@ -24,4 +24,4 @@ Quickstart
 	"pip install -r base.txt"
     4. Go to "static" folder, and run "npm install" command. Note that you should have NodeJS installed.
     5. Run "python manage.py generate_database" command to generate and fill your database.
-    5. In order to start the REST service, run "python manage.py runserver" command in the project folder, then run "npm start" command in the "static" folder.
+    6. In order to start the REST service, run "python manage.py runserver" command in the project folder, then run "npm start" command in the "static" folder.
