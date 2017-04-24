@@ -16,11 +16,12 @@ class Command(BaseCommand):
         base_path = os.getcwd()
         # Path for csv files.
         full_path = (base_path +
-                     "\\api_root\management\commands\ml-latest-small")
+                     "\\api_root\management\commands\dataset\\ml-latest-small")
 
         try:
             with open(full_path + '\\ratings.csv') as ratings_file, \
                     open(full_path + '\links.csv') as links_file:
+
                 ratings = csv.DictReader(ratings_file)
                 links = csv.DictReader(links_file)
 
