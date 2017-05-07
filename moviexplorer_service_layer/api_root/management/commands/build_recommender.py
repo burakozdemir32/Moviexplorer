@@ -1,31 +1,35 @@
-# Django core imports.
-from django.core.management.base import BaseCommand
 # Built-in libraries.
 import os
 import math
 # PySpark libraries.
 from pyspark.sql import SparkSession
-from pyspark.mllib.recommendation import ALS, Rating
+from pyspark.mllib.recommendation import ALS, Rating, MatrixFactorizationModel
+# Django core imports.
+from django.core.management.base import BaseCommand
+# Django app imports.
+from api_root.models import (UserRatings, Recommendations)
 
 
 class Command(BaseCommand):
     help = 'Initialises spark based recommendation engine.'
 
     @staticmethod
-    def get_rating_counts(id_and_ratings_tuple):
-        rating_counts = len(id_and_ratings_tuple[1])
-        return id_and_ratings_tuple[0], rating_counts
+    def get_rating_counts(movie_id_with_ratings_rdd):
+        movie_id_with_ratings_dict = dict()
+        for item in movie_id_with_ratings_rdd:
+            movie_id = item[0]
+            rating_counts = len(item[1])
+            movie_id_with_ratings_dict[movie_id] = rating_counts
+
+        return movie_id_with_ratings_dict
 
     def handle(self, *args, **options):
-        # PATH declarations.
-        os.environ['HADOOP_HOME'] = "C:\winutils"
-        os.environ["SPARK_HOME"] = "C:\spark"
-        os.environ["SPARK_CLASSPATH"] = "C:\spark\postgresql.jar"
-
         # Path for csv files for the test model.
         base_path = os.getcwd()
         full_path = (base_path +
                      "\\api_root\management\commands\dataset\\test_data.csv")
+        model_path = (base_path +
+                      "\\api_root\management\commands\models")
 
         # Database informations for the complete model.
         # db_url = "jdbc:postgresql://localhost:5432/" \
@@ -34,9 +38,8 @@ class Command(BaseCommand):
 
         # Creates a SparkSession. No need to create a SparkContext.
         spark_session = SparkSession.builder.getOrCreate()
-
-        # This causes some issues on Windows.
-        # spark_session.sparkContext.setCheckpointDir("checkpoint")
+        spark_context = spark_session.sparkContext
+        spark_context.setCheckpointDir("checkpoint")
 
         test_data = spark_session.read.option("header", "true").csv(
             full_path
@@ -102,69 +105,67 @@ class Command(BaseCommand):
         print('For the validation data the RMSE is {}'.format(error))
         print('The test model was trained with rank {}'.format(best_rank))
 
-        new_user_id = 0
-        # The format of each line is (userID, movieID, rating)
-        new_user_ratings = [
-            Rating(0, 238, 5),
-            Rating(0, 244786, 4.5),
-            Rating(0, 77338, 5),
-            Rating(0, 497, 5),
-            Rating(0, 157336, 4.5),
-            Rating(0, 27205, 5),
-            Rating(0, 103, 4),
-            Rating(0, 274, 4),
-            Rating(0, 670, 4),
-            Rating(0, 103663, 4)
-        ]
-        new_user_ratings_rdd = spark_session.sparkContext.parallelize(
-            new_user_ratings
-        )
-        complete_data_with_new_ratings_rdd = test_data_ratings_rdd.union(
-            new_user_ratings_rdd
+        # All the user ids who rated a movie.(Local users, not MovieLens's)
+        user_ids = UserRatings.objects.values_list(
+            'user_id', flat=True
+        ).distinct()
+
+        # The format of each line is (user_id, movie_id, rating)
+        user_ratings = UserRatings.objects.all()
+        user_ratings = list(
+            map(lambda row: Rating(row.user_id, row.movie_id, row.rating),
+                user_ratings)
         )
 
-        test_model = ALS.train(
-            ratings=complete_data_with_new_ratings_rdd, rank=best_rank,
-            lambda_=regularization_parameter
+        user_ratings_rdd = spark_context.parallelize(
+            user_ratings
         )
+        complete_data_with_user_ratings_rdd = test_data_ratings_rdd.union(
+            user_ratings_rdd
+        ).cache()
+
+        test_model = ALS.train(ratings=complete_data_with_user_ratings_rdd,
+                               rank=best_rank, lambda_=regularization_parameter
+                               )
+        # Saves the model.
+        # test_model.save(spark_context, model_path)
 
         movie_id_with_ratings_rdd = (
-            complete_data_with_new_ratings_rdd.map(
+            complete_data_with_user_ratings_rdd.map(
                 lambda row: (row[1], row[2])
             ).groupByKey()
         )
-        movie_id_with_counts = movie_id_with_ratings_rdd.map(
-            Command.get_rating_counts
+        movie_id_with_counts = Command.get_rating_counts(
+            movie_id_with_ratings_rdd.collect()
         )
 
-        # Gets just movie ids.
-        new_user_ratings_ids = map(lambda x: x.product, new_user_ratings)
+        for user_id in user_ids:
+            # Gets just movie ids for user_id.
+            user_movies = list(
+                map(lambda row: row.product, user_ratings)
+            )
 
-        # Keeps just those not on the id list.
-        candidates = (test_data_movie_ids_rdd.filter(
-            lambda x: x not in new_user_ratings_ids).map(
-            lambda x: (new_user_id, x))
-        )
+            # Keeps just those not on the id list.
+            candidates = test_data_movie_ids_rdd.filter(
+                lambda x: x not in user_movies
+            ).map(lambda x: (user_id, x))
 
-        new_user_recommendations_rdd = test_model.predictAll(
-            candidates
-        )
+            new_user_recommendations_rdd = test_model.predictAll(candidates)
+            new_user_recommendations_rating_rdd = new_user_recommendations_rdd.map(
+                lambda row: (row.user, row.product, row.rating,
+                             movie_id_with_counts[row.product])
+            )
 
-        new_user_recommendations_rating_rdd = new_user_recommendations_rdd.map(
-            lambda row: (row.product, row.rating)
-        )
+            top_recommendations = new_user_recommendations_rating_rdd.filter(
+                lambda row: row[3] >= 50
+            ).takeOrdered(10, lambda row: -row[2])
 
-        new_user_recommendations_rating_count_rdd = \
-            new_user_recommendations_rating_rdd.join(movie_id_with_counts)
-
-        top_movies = new_user_recommendations_rating_count_rdd.filter(
-            lambda row: row[1][1] >= 25
-        ).takeOrdered(
-            10, lambda row: -row[1][0]
-        )
-
-        print('TOP recommended movies (with more than 25 reviews):\n{}'.format(
-            '\n'.join(map(str, top_movies)))
-        )
+            print('TOP 10 recommended movies (with more than 50 reviews):')
+            for recommendation in top_recommendations:
+                print('User id: {} Movie id: {}'.format(
+                    recommendation[0], recommendation[1])
+                )
+                Recommendations.objects.create(user_id=recommendation[0],
+                                               movie_id=recommendation[1])
 
         spark_session.stop()

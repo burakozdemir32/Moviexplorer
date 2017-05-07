@@ -7,10 +7,32 @@
                     <img class="me-header-logo-img" role="banner" src="/img/logo.png" alt="Moviexplorer">
                 </a>
                 <div class="me-header-links">
-                    <a href="/" class="me-header-link">Login</a>
+                    <a (click)="openModal()" class="me-header-link">Login</a>
                 </div>
             </div>
         </header>
     </div>
 </div>
 <movie-cmp></movie-cmp>
+<modal #loginModal>
+    <modal-header [show-close]="true">
+        <h1 class="text-center">Login</h1>
+    </modal-header>
+    <modal-body>
+        <div class="form-group has-feedback">
+            <input class="form-control input-lg validate" type="text" name="email" placeholder="Email" [(ngModel)]="userCredentials.username">
+         </div>
+        <div class="form-group has-feedback">
+            <input class="form-control input-lg validate" type="password" name="password" placeholder="Password" [(ngModel)]="userCredentials.password">
+        </div>
+        <button (click)="login()" type="submit" class="btn btn-lg  btn-block btn-success">Login</button>
+    </modal-body>
+    <modal-footer>
+        <p class="text-center modal-footer-text">
+            <small>New to Moviexplorer? <a>Sign up</a></small>
+        </p>
+        <p class="text-center modal-footer-text">
+            <small>Forgot your password? <a>Reset Password</a></small>
+        </p>
+    </modal-footer>
+</modal>

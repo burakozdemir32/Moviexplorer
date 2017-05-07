@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MovieService } from '../services/movie.service';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
-import { Subject } from "rxjs/Subject";
+import { Subject } from 'rxjs/Subject';
 
 @Component({
     moduleId: module.id,

@@ -13,6 +13,9 @@ body {
     color: #333;
     margin: 0;
 }
+a {
+    cursor: pointer;
+}
 .me-header {
     height: 6rem;
     box-shadow: 0 0 1.2rem rgba(11, 79, 114, 0.3);
@@ -245,4 +248,9 @@ a.text-black:focus, a.text-black:hover {
     .list-meta .list-meta-item {
         margin-right: 8px;
     }
+}
+/* Modal styles */
+.modal-footer-text {
+    color: darkgray;
+    font-size: 1.6rem;
 }

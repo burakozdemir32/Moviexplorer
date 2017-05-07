@@ -18,18 +18,22 @@ from django.conf.urls import url, include
 
 from rest_framework import routers
 from rest_framework.schemas import get_schema_view
+from rest_framework_jwt.views import obtain_jwt_token
 
-from api_root.views import MovieViewSet
+from api_root.views import MovieSearchView, CreateUserView, \
+    MovieRecommendationView
 
 
 schema_view = get_schema_view(title='Moviexplorer API')
 
 router = routers.DefaultRouter()
-router.register(r'movies', MovieViewSet, base_name='movies')
+router.register(r'movies', MovieSearchView, base_name='movies')
+router.register(r'recommendations', MovieRecommendationView, base_name='recommendations')
 
 urlpatterns = [
     url(r'^api/', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls')),
+    url(r'^register/$', CreateUserView.as_view()),
     url(r'^admin/', admin.site.urls),
-    url(r'^api/schema/$', schema_view)
+    url(r'^api/schema/$', schema_view),
+    url(r'^api/token/auth/', obtain_jwt_token),
 ]

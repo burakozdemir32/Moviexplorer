@@ -8,6 +8,8 @@ markdown==2.6.8
 django-filter==1.0.2
 coreapi==2.3.0
 djangorestframework-jsonp==1.0.0
+djangorestframework_jwt==1.10.0
+django-cors-headers==2.0.2
 
 #Movie APIs
 tmdbsimple==1.5.0

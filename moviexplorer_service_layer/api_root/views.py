@@ -1,30 +1,63 @@
-from .models import MovieRatings
-from .serializers import MovieRatingsSerializer
+from .models import MovieRatings, Recommendations
+from .serializers import MovieRatingsSerializer, UserSerializer, \
+    RecommendationSerializer
+
+from django.contrib.auth import get_user_model
 
 from rest_framework import viewsets
 from rest_framework_jsonp.renderers import JSONPRenderer
 from rest_framework import permissions
 
-class MovieViewSet(viewsets.ReadOnlyModelViewSet):
+
+class MovieSearchView(viewsets.ReadOnlyModelViewSet):
     """
-    This endpoint presents top movie informations.
+    This endpoint presents top movie information.
     """
-    renderer_classes = (JSONPRenderer,)
+    renderer_classes = (JSONPRenderer, )
     serializer_class = MovieRatingsSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
     def get_queryset(self):
         """
-        This view should return a list of all the purchases
-        for the currently authenticated user.
+        This view should return a list of movies 
+        for the currently searched movie title.
         """
-        queryset = MovieRatings.objects.all()\
-            .order_by('-average_rating')\
-            .exclude(imdb_rating__gte=7)
-
         title = self.request.query_params.get('title', None)
+
         if title is not None:
-            queryset = queryset.filter(movie__title__icontains=title)
-        return queryset
+            queryset = MovieRatings.objects.filter(
+                movie__title__icontains=title
+            )
+            return queryset
+        else:
+            return []
+
+
+class CreateUserView(viewsets.generics.CreateAPIView):
+    permission_classes = (permissions.AllowAny, )
+    serializer_class = UserSerializer
+    model = get_user_model()
+
+
+class MovieRecommendationView(viewsets.ReadOnlyModelViewSet):
+    """
+    This endpoint presents top movie information.
+    """
+    renderer_classes = (JSONPRenderer, )
+    serializer_class = RecommendationSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+
+    def get_queryset(self):
+        """
+        This view should return a list of movie recommendation
+        for the current user.
+        """
+        user_id = self.request.query_params.get('user_id', None)
+
+        if user_id is not None:
+            queryset = Recommendations.objects.filter(user_id=user_id)
+            return queryset
+        else:
+            return []
 
 

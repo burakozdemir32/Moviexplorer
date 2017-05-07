@@ -11,6 +11,7 @@ var http_1 = require("@angular/http");
 var forms_1 = require("@angular/forms");
 var text_truncate_pipe_1 = require("./pipes/text-truncate.pipe");
 var ng2_slim_loading_bar_1 = require("ng2-slim-loading-bar");
+var ng2_bs3_modal_1 = require("ng2-bs3-modal/ng2-bs3-modal");
 var app_component_1 = require("./app.component");
 var movie_component_1 = require("./movie/movie.component");
 var AppModule = (function () {
@@ -20,8 +21,8 @@ var AppModule = (function () {
 }());
 AppModule = __decorate([
     core_1.NgModule({
-        imports: [platform_browser_1.BrowserModule, http_1.HttpModule, http_1.JsonpModule,
-            ng2_slim_loading_bar_1.SlimLoadingBarModule.forRoot(), forms_1.FormsModule],
+        imports: [platform_browser_1.BrowserModule, http_1.HttpModule, http_1.JsonpModule, forms_1.FormsModule,
+            ng2_slim_loading_bar_1.SlimLoadingBarModule.forRoot(), ng2_bs3_modal_1.Ng2Bs3ModalModule],
         declarations: [app_component_1.AppComponent, movie_component_1.MovieComponent, text_truncate_pipe_1.TruncatePipe],
         bootstrap: [app_component_1.AppComponent]
     })

@@ -12,7 +12,6 @@
     map: {
       // our app is within the app folder
       'app': 'app',
-      'ng2-slim-loading-bar': 'node_modules/ng2-slim-loading-bar/bundles/index.umd.js',
 
       // angular bundles
       '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
@@ -25,8 +24,10 @@
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
 
       // other libraries
-      'rxjs':                      'npm:rxjs',
-      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
+      'rxjs': 'npm:rxjs',
+      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
+      'ng2-slim-loading-bar': 'npm:ng2-slim-loading-bar/bundles/index.umd.js',
+      'ng2-bs3-modal': 'npm:ng2-bs3-modal'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
@@ -40,6 +41,9 @@
       },
       rxjs: {
         defaultExtension: 'js'
+      },
+      'ng2-bs3-modal': {
+          defaultExtension: 'js'
       }
     }
   });
