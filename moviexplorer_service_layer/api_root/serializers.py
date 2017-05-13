@@ -33,14 +33,3 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ('username', 'password')
-
-
-class RecommendationSerializer(serializers.ModelSerializer):
-    def to_representation(self, data):
-        r = super().to_representation(data)
-
-        return r['movie_id']
-
-    class Meta:
-        model = Recommendations
-        fields = ('movie_id',)

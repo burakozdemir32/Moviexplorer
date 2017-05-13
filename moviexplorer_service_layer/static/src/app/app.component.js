@@ -19,13 +19,15 @@ var AppComponent = (function () {
             username: '',
             password: ''
         };
-        this.error = '';
+        this.error = false;
+        this.isLoggedIn = false;
     }
     // Modal methods.
     AppComponent.prototype.closeModal = function () {
         this.loginModal.close();
     };
     AppComponent.prototype.openModal = function () {
+        this.error = false;
         this.loginModal.open();
     };
     // Authentication.
@@ -34,19 +36,20 @@ var AppComponent = (function () {
         this.authService.login(this.userCredentials)
             .subscribe(function (result) {
             if (result === true) {
+                _this.isLoggedIn = true;
                 _this.closeModal();
             }
             else {
-                _this.error = 'Username or password is incorrect';
+                _this.error = true;
             }
         }, function (error) {
-            _this.error = error;
+            _this.error = true;
         });
     };
     return AppComponent;
 }());
 __decorate([
-    core_1.ViewChild('loginModal'),
+    core_1.ViewChild(ng2_bs3_modal_1.ModalComponent),
     __metadata("design:type", ng2_bs3_modal_1.ModalComponent)
 ], AppComponent.prototype, "loginModal", void 0);
 AppComponent = __decorate([

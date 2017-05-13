@@ -11,14 +11,15 @@ import {AuthService} from './services/auth.service';
     providers: [ MovieService, AuthService ]
 })
 export class AppComponent {
-    @ViewChild('loginModal')
-    loginModal: ModalComponent;
+    @ViewChild(ModalComponent)
+    private loginModal: ModalComponent;
 
     userCredentials = {
         username: '',
         password: ''
     };
-    error = '';
+    error = false;
+    isLoggedIn = false;
 
     constructor(private authService: AuthService) {
     }
@@ -28,6 +29,7 @@ export class AppComponent {
     }
 
     openModal() {
+        this.error = false;
         this.loginModal.open();
     }
 
@@ -36,12 +38,14 @@ export class AppComponent {
         this.authService.login(this.userCredentials)
             .subscribe(result => {
                 if (result === true) {
+                    this.isLoggedIn = true;
                     this.closeModal();
+
                 } else {
-                    this.error = 'Username or password is incorrect';
+                    this.error = true;
                 }
             }, error => {
-                this.error = error;
+                this.error = true;
             });
     }
 }

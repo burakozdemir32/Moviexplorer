@@ -14,18 +14,21 @@ require("rxjs/Rx");
 var MovieService = (function () {
     function MovieService(jsonp) {
         this.jsonp = jsonp;
-        this.apiURL = 'http://127.0.0.1:8000/api/movies?callback=JSONP_CALLBACK';
+        this.apiURL = 'http://127.0.0.1:8000/api/';
         console.log('Movie service initialised.');
     }
-    MovieService.prototype.getTopMovies = function () {
-        return this.jsonp.get(this.apiURL)
-            .map(function (res) { return res.json(); });
-    };
     MovieService.prototype.searchMovie = function (title) {
         var search = new http_1.URLSearchParams();
         search.set('action', 'opensearch');
         search.set('title', title);
-        return this.jsonp.get(this.apiURL, { search: search })
+        return this.jsonp.get(this.apiURL + 'movies?callback=JSONP_CALLBACK', { search: search })
+            .map(function (res) { return res.json(); });
+    };
+    MovieService.prototype.getRecommendations = function (user_id) {
+        var search = new http_1.URLSearchParams();
+        search.set('action', 'opensearch');
+        search.set('user_id', user_id);
+        return this.jsonp.get(this.apiURL + 'recommendations?callback=JSONP_CALLBACK', { search: search })
             .map(function (res) { return res.json(); });
     };
     return MovieService;

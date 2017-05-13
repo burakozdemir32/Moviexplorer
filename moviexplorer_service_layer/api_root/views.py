@@ -1,6 +1,5 @@
 from .models import MovieRatings, Recommendations
-from .serializers import MovieRatingsSerializer, UserSerializer, \
-    RecommendationSerializer
+from .serializers import MovieRatingsSerializer, UserSerializer
 
 from django.contrib.auth import get_user_model
 
@@ -44,7 +43,7 @@ class MovieRecommendationView(viewsets.ReadOnlyModelViewSet):
     This endpoint presents top movie information.
     """
     renderer_classes = (JSONPRenderer, )
-    serializer_class = RecommendationSerializer
+    serializer_class = MovieRatingsSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
     def get_queryset(self):
@@ -55,7 +54,12 @@ class MovieRecommendationView(viewsets.ReadOnlyModelViewSet):
         user_id = self.request.query_params.get('user_id', None)
 
         if user_id is not None:
-            queryset = Recommendations.objects.filter(user_id=user_id)
+            recommendations = Recommendations.objects.filter(user_id=user_id)
+            movie_ids = []
+            for recommendation in recommendations:
+                movie_ids.append(recommendation.movie_id)
+
+            queryset = MovieRatings.objects.filter(movie__id__in=movie_ids)
             return queryset
         else:
             return []

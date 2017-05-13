@@ -97,7 +97,7 @@ class UserRatings(models.Model):
         unique_together = ('user_id', 'movie',)
 
     def __str__(self):
-        return 'User Id: {}, Movie Id: {}, Rating: {]'.format(
+        return 'User Id: {}, Movie: {}, Rating: {]'.format(
             self.user_id, self.movie, self.rating
         )
 
@@ -110,6 +110,6 @@ class Recommendations(models.Model):
         unique_together = ('user_id', 'movie',)
 
     def __str__(self):
-        return 'User Id: {}, Movie Id: {}'.format(
+        return 'User Id: {}, Movie: {}'.format(
             self.user_id, self.movie
         )

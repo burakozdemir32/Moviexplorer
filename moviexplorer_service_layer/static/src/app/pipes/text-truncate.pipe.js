@@ -12,7 +12,12 @@ var TruncatePipe = (function () {
     TruncatePipe.prototype.transform = function (value, _limit) {
         var limit = _limit;
         var trail = '...';
-        return value.length > limit ? value.substring(0, limit) + trail : value;
+        if (value == null) {
+            return 'No overview.';
+        }
+        else {
+            return value.length > limit ? value.substring(0, limit) + trail : value;
+        }
     };
     return TruncatePipe;
 }());

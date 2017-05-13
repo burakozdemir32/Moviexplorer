@@ -1,16 +1,14 @@
-<div class="me-top">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="me-search">
-                    <form (ngSubmit)="searchMovie(movie_search_box.value)">
-                        <input #movie_search_box type="search" class="me-search-input" placeholder="Search movies">
-                        <button type="submit" class="me-search-button">
-                            <span class="hidden-xs">Search</span>
-                            <i class="fa fa-search visible-xs-inline"></i>
-                        </button>
-                    </form>
-                </div>
+<div class="container me-top">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="me-search">
+                <form (ngSubmit)="searchMovie(movie_search_box.value)">
+                    <input #movie_search_box type="search" class="me-search-input" placeholder="Search movies">
+                    <button type="submit" class="me-search-button">
+                        <span class="hidden-xs">Search</span>
+                        <i class="fa fa-search visible-xs-inline"></i>
+                    </button>
+                </form>
             </div>
         </div>
     </div>

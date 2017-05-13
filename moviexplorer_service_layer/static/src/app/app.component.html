@@ -7,13 +7,14 @@
                     <img class="me-header-logo-img" role="banner" src="/img/logo.png" alt="Moviexplorer">
                 </a>
                 <div class="me-header-links">
-                    <a (click)="openModal()" class="me-header-link">Login</a>
+                    <a class="me-header-link" *ngIf="isLoggedIn" routerLink="recommendations" routerLinkActive="me-header-link-active">Recommendations</a>
+                    <a class="me-header-link" (click)="openModal()" *ngIf="!isLoggedIn">Login</a>
+                    <a class="me-header-link" *ngIf="isLoggedIn">Logout</a>
                 </div>
             </div>
         </header>
     </div>
 </div>
-<movie-cmp></movie-cmp>
 <modal #loginModal>
     <modal-header [show-close]="true">
         <h1 class="text-center">Login</h1>
@@ -26,6 +27,9 @@
             <input class="form-control input-lg validate" type="password" name="password" placeholder="Password" [(ngModel)]="userCredentials.password">
         </div>
         <button (click)="login()" type="submit" class="btn btn-lg  btn-block btn-success">Login</button>
+        <div class="alert alert-danger" *ngIf="error">
+            <strong>There was a problem!</strong> Username or/and password is incorrect!
+        </div>
     </modal-body>
     <modal-footer>
         <p class="text-center modal-footer-text">
@@ -36,3 +40,4 @@
         </p>
     </modal-footer>
 </modal>
+<router-outlet></router-outlet>

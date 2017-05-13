@@ -39,11 +39,14 @@ a {
     float: left;
     padding: 2rem 2rem;
     color: #fff;
+    text-decoration: none !important;
 }
-.me-header-link:hover {
-    color: #fff;
+.me-header-link:hover, .me-header-link:visited{
     background-color: #34495e;
-    text-decoration: none;
+    color: #fff;
+}
+.me-header-link-active {
+    background-color: #34495e;
 }
 .me-top {
     margin-top: 4rem;
