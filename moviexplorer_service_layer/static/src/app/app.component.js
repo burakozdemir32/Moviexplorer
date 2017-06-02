@@ -10,11 +10,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var ng2_bs3_modal_1 = require("ng2-bs3-modal/ng2-bs3-modal");
+var router_1 = require("@angular/router");
 var movie_service_1 = require("./services/movie.service");
 var auth_service_1 = require("./services/auth.service");
 var AppComponent = (function () {
-    function AppComponent(authService) {
+    function AppComponent(authService, router) {
         this.authService = authService;
+        this.router = router;
         this.userCredentials = {
             username: '',
             password: ''
@@ -46,6 +48,11 @@ var AppComponent = (function () {
             _this.error = true;
         });
     };
+    AppComponent.prototype.logout = function () {
+        this.authService.logout();
+        this.isLoggedIn = false;
+        this.router.navigate(['']);
+    };
     return AppComponent;
 }());
 __decorate([
@@ -59,7 +66,7 @@ AppComponent = __decorate([
         templateUrl: 'app.component.html',
         providers: [movie_service_1.MovieService, auth_service_1.AuthService]
     }),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService, router_1.Router])
 ], AppComponent);
 exports.AppComponent = AppComponent;
 //# sourceMappingURL=app.component.js.map

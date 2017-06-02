@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import {ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal';
-
-import {MovieService} from './services/movie.service';
-import {AuthService} from './services/auth.service';
+import { ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
+import { Router } from '@angular/router';
+import { MovieService } from './services/movie.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
     moduleId: module.id,
@@ -21,7 +21,7 @@ export class AppComponent {
     error = false;
     isLoggedIn = false;
 
-    constructor(private authService: AuthService) {
+    constructor(private authService: AuthService, private router: Router) {
     }
     // Modal methods.
     closeModal() {
@@ -47,5 +47,11 @@ export class AppComponent {
             }, error => {
                 this.error = true;
             });
+    }
+
+    logout() {
+        this.authService.logout();
+        this.isLoggedIn = false;
+        this.router.navigate(['']);
     }
 }
