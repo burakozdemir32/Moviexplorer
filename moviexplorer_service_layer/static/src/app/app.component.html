@@ -15,27 +15,64 @@
         </header>
     </div>
 </div>
-<modal #loginModal>
+<modal #loginModal (onDismiss)="resetForms()" (onClose)="resetForms()">
     <modal-header [show-close]="true">
-        <h1 class="text-center">Login</h1>
+        <h1 class="text-center" *ngIf="showLoginField">Login</h1>
+        <h1 class="text-center" *ngIf="!showLoginField">Register</h1>
     </modal-header>
     <modal-body>
-        <div class="form-group has-feedback">
-            <input class="form-control input-lg validate" type="text" name="email" placeholder="Email" [(ngModel)]="userCredentials.username">
-         </div>
-        <div class="form-group has-feedback">
-            <input class="form-control input-lg validate" type="password" name="password" placeholder="Password" [(ngModel)]="userCredentials.password">
+         <div *ngIf="showLoginField">
+            <form [formGroup]="loginForm" (ngSubmit)="login()">
+                <div class="form-group">
+                    <input class="form-control input-lg" type="text" placeholder="Username" [(ngModel)]="userCredentials.username" formControlName="username">
+                </div>
+                <div class="form-group">
+                    <input class="form-control input-lg" type="password" placeholder="Password" [(ngModel)]="userCredentials.password" formControlName="password">
+                </div>
+                <button type="submit" class="btn btn-lg  btn-block btn-success" [disabled]="!loginForm.valid">Login</button>
+            </form>
+            <div class="alert alert-danger" *ngIf="error">
+                <strong>There was a problem!</strong> Username or/and password is incorrect!
+            </div>
         </div>
-        <button (click)="login()" type="submit" class="btn btn-lg  btn-block btn-success">Login</button>
-        <div class="alert alert-danger" *ngIf="error">
-            <strong>There was a problem!</strong> Username or/and password is incorrect!
+        <div *ngIf="!showLoginField">
+            <form [formGroup]="registerForm" (ngSubmit)="submitRegisterForm()">
+                <div class="form-group">
+                    <input class="form-control input-lg" type="text" placeholder="Username" id="username" [(ngModel)]="userInformation.username" formControlName="username">
+                    <div *ngIf="formErrors.username" class="alert alert-danger">
+                        {{ formErrors.username }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input class="form-control input-lg" type="email" placeholder="Email" id="email" [(ngModel)]="userInformation.email" formControlName="email">
+                    <div *ngIf="formErrors.email" class="alert alert-danger">
+                        {{ formErrors.email }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input class="form-control input-lg" type="password" placeholder="Password" id="password" [(ngModel)]="userInformation.password" formControlName="password">
+                    <div *ngIf="formErrors.password" class="alert alert-danger">
+                        {{ formErrors.password }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input class="form-control input-lg" type="password" placeholder="Confirm Password" id="confirmPassword" formControlName="confirmPassword">
+                    <div *ngIf="formErrors.confirmPassword" class="alert alert-danger">
+                        {{ formErrors.confirmPassword }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-lg  btn-block btn-success" [disabled]="!registerForm.valid">Register</button>
+            </form>
         </div>
     </modal-body>
     <modal-footer>
-        <p class="text-center modal-footer-text">
-            <small>New to Moviexplorer? <a>Sign up</a></small>
+        <p class="text-center modal-footer-text" *ngIf="showLoginField">
+            <small>New to Moviexplorer? <a (click)="showLoginField=false">Register</a></small>
         </p>
-        <p class="text-center modal-footer-text">
+        <p class="text-center modal-footer-text" *ngIf="!showLoginField">
+            <small>Already have an account? <a (click)="showLoginField=true" >Login</a></small>
+        </p>
+        <p class="text-center modal-footer-text" *ngIf="showLoginField">
             <small>Forgot your password? <a>Reset Password</a></small>
         </p>
     </modal-footer>

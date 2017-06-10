@@ -12,30 +12,32 @@ var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 require("rxjs/Rx");
 var MovieService = (function () {
-    function MovieService(jsonp) {
+    function MovieService(jsonp, http) {
         this.jsonp = jsonp;
+        this.http = http;
         this.apiURL = 'http://127.0.0.1:8000/api/';
-        console.log('Movie service initialised.');
     }
     MovieService.prototype.searchMovie = function (title) {
         var search = new http_1.URLSearchParams();
-        search.set('action', 'opensearch');
         search.set('title', title);
         return this.jsonp.get(this.apiURL + 'movies?callback=JSONP_CALLBACK', { search: search })
             .map(function (res) { return res.json(); });
     };
     MovieService.prototype.getRecommendations = function (user_id) {
         var search = new http_1.URLSearchParams();
-        search.set('action', 'opensearch');
         search.set('user_id', user_id);
-        return this.jsonp.get(this.apiURL + 'recommendations?callback=JSONP_CALLBACK', { search: search })
+        var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        var token = currentUser.token;
+        var headers = new http_1.Headers();
+        headers.set('Authorization', 'JWT ' + token);
+        return this.http.get(this.apiURL + 'recommendations/', { headers: headers, search: search })
             .map(function (res) { return res.json(); });
     };
     return MovieService;
 }());
 MovieService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [http_1.Jsonp])
+    __metadata("design:paramtypes", [http_1.Jsonp, http_1.Http])
 ], MovieService);
 exports.MovieService = MovieService;
 //# sourceMappingURL=movie.service.js.map

@@ -17,6 +17,7 @@ var movie_component_1 = require("./movie/movie.component");
 var recommendations_component_1 = require("./recommendations/recommendations.component");
 var app_routing_1 = require("./app.routing");
 var auth_guard_1 = require("./guards/auth.guard");
+var forms_2 = require("@angular/forms");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -25,7 +26,7 @@ var AppModule = (function () {
 AppModule = __decorate([
     core_1.NgModule({
         imports: [platform_browser_1.BrowserModule, http_1.HttpModule, http_1.JsonpModule, forms_1.FormsModule,
-            ng2_slim_loading_bar_1.SlimLoadingBarModule.forRoot(), ng2_bs3_modal_1.Ng2Bs3ModalModule, app_routing_1.routing],
+            ng2_slim_loading_bar_1.SlimLoadingBarModule.forRoot(), ng2_bs3_modal_1.Ng2Bs3ModalModule, app_routing_1.routing, forms_2.ReactiveFormsModule],
         declarations: [app_component_1.AppComponent, movie_component_1.MovieComponent, recommendations_component_1.RecommendationsComponent, text_truncate_pipe_1.TruncatePipe],
         bootstrap: [app_component_1.AppComponent],
         providers: [app_routing_1.appRoutingProviders, auth_guard_1.AuthGuard]

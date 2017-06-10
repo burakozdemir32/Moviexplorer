@@ -33,6 +33,9 @@ class MovieSearchView(viewsets.ReadOnlyModelViewSet):
 
 
 class CreateUserView(viewsets.generics.CreateAPIView):
+    """
+    This endpoint allows users to register to the system.
+    """
     permission_classes = (permissions.AllowAny, )
     serializer_class = UserSerializer
     model = get_user_model()
@@ -40,11 +43,10 @@ class CreateUserView(viewsets.generics.CreateAPIView):
 
 class MovieRecommendationView(viewsets.ReadOnlyModelViewSet):
     """
-    This endpoint presents top movie information.
+    This endpoint makes movie recommendations.
     """
-    renderer_classes = (JSONPRenderer, )
     serializer_class = MovieRatingsSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    permission_classes = (permissions.IsAuthenticated, )
 
     def get_queryset(self):
         """
@@ -63,5 +65,3 @@ class MovieRecommendationView(viewsets.ReadOnlyModelViewSet):
             return queryset
         else:
             return []
-
-

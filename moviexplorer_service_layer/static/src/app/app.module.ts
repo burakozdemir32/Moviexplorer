@@ -10,10 +10,11 @@ import { MovieComponent }  from './movie/movie.component';
 import { RecommendationsComponent }  from './recommendations/recommendations.component';
 import { routing, appRoutingProviders } from  './app.routing';
 import { AuthGuard } from './guards/auth.guard';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports:      [ BrowserModule, HttpModule, JsonpModule, FormsModule,
-                  SlimLoadingBarModule.forRoot(), Ng2Bs3ModalModule, routing],
+                  SlimLoadingBarModule.forRoot(), Ng2Bs3ModalModule, routing, ReactiveFormsModule],
   declarations: [ AppComponent, MovieComponent, RecommendationsComponent, TruncatePipe],
   bootstrap:    [ AppComponent ],
   providers: [ appRoutingProviders, AuthGuard ]
