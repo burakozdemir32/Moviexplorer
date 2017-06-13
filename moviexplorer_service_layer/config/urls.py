@@ -21,7 +21,7 @@ from rest_framework.schemas import get_schema_view
 from rest_framework_jwt.views import obtain_jwt_token
 
 from api_root.views import MovieSearchView, CreateUserView, \
-    MovieRecommendationView
+    MovieRecommendationView, UserRatingsView
 
 
 schema_view = get_schema_view(title='Moviexplorer API')
@@ -29,6 +29,7 @@ schema_view = get_schema_view(title='Moviexplorer API')
 router = routers.DefaultRouter()
 router.register(r'movies', MovieSearchView, base_name='movies')
 router.register(r'recommendations', MovieRecommendationView, base_name='recommendations')
+router.register(r'rate', UserRatingsView, base_name='rate')
 
 urlpatterns = [
     url(r'^api/', include(router.urls)),

@@ -176,8 +176,9 @@ a.text-black:focus, a.text-black:hover {
     font-size: 16px;
     margin: 0px;
 }
-.view-more {
+.star-rating {
     border-top: 1px solid #eee;
+    cursor: pointer;
     position: absolute;
     bottom: 0px;
     margin: 0px;

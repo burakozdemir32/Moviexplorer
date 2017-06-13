@@ -1,4 +1,4 @@
-from .models import Movie, MovieRatings
+from .models import Movie, MovieRatings, UserRatings
 from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
@@ -8,7 +8,7 @@ from rest_framework.validators import UniqueValidator
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
-        exclude = ('id',)
+        fields = '__all__'
 
 
 class MovieRatingsSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class MovieRatingsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MovieRatings
-        exclude = ('id',)
+        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -41,3 +41,17 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ('username', 'password', 'email')
 
+
+class UserRatingsSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        user_rating = UserRatings(
+            user_id=validated_data['user_id'],
+            rating=validated_data['rating'],
+            movie=validated_data['movie']
+        )
+        user_rating.save()
+        return user_rating
+
+    class Meta:
+        model = UserRatings
+        fields = '__all__'

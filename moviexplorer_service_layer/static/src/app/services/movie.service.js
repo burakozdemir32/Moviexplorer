@@ -11,6 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 require("rxjs/Rx");
+require("rxjs/add/operator/map");
+require("rxjs/add/operator/catch");
+require("rxjs/add/observable/throw");
 var MovieService = (function () {
     function MovieService(jsonp, http) {
         this.jsonp = jsonp;
@@ -23,11 +26,12 @@ var MovieService = (function () {
         return this.jsonp.get(this.apiURL + 'movies?callback=JSONP_CALLBACK', { search: search })
             .map(function (res) { return res.json(); });
     };
-    MovieService.prototype.getRecommendations = function (user_id) {
+    MovieService.prototype.getRecommendations = function () {
         var search = new http_1.URLSearchParams();
-        search.set('user_id', user_id);
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         var token = currentUser.token;
+        var username = currentUser.username;
+        search.set('username', username);
         var headers = new http_1.Headers();
         headers.set('Authorization', 'JWT ' + token);
         return this.http.get(this.apiURL + 'recommendations/', { headers: headers, search: search })

@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Jsonp, URLSearchParams, Headers, Http } from '@angular/http';
 import 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class MovieService {
@@ -18,12 +22,13 @@ export class MovieService {
 
     }
 
-    getRecommendations(user_id: string) {
+    getRecommendations() {
         let search = new URLSearchParams();
-        search.set('user_id', user_id);
 
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
         let token = currentUser.token;
+        let username = currentUser.username;
+        search.set('username', username);
 
         let headers = new Headers();
         headers.set('Authorization', 'JWT ' + token);

@@ -165,7 +165,7 @@ class Command(BaseCommand):
                 print('User id: {} Movie id: {}'.format(
                     recommendation[0], recommendation[1])
                 )
-                Recommendations.objects.create(user_id=recommendation[0],
-                                               movie_id=recommendation[1])
+                Recommendations.objects.get_or_create(user_id=recommendation[0],
+                                                      movie_id=recommendation[1])
 
         spark_session.stop()
