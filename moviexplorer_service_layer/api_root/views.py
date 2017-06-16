@@ -55,8 +55,8 @@ class UserRatingsView(viewsets.generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        rating_id = UserRatings.objects.get(id=serializer.instance.id)
-        return Response({'id': rating_id}, status=status.HTTP_201_CREATED, headers=headers)
+        rating = UserRatings.objects.get(id=serializer.instance.id)
+        return Response({'id': rating.id}, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class MovieRecommendationView(viewsets.ReadOnlyModelViewSet):

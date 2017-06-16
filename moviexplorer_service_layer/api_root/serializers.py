@@ -20,7 +20,6 @@ class MovieRatingsSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
     email = serializers.EmailField(required=True, validators=[
         UniqueValidator(
             queryset=get_user_model().objects.all(),
@@ -39,7 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = '__all__'
+        fields = ('username', 'email', 'password')
 
 
 class UserRatingsSerializer(serializers.ModelSerializer):

@@ -60,6 +60,7 @@ export class AppComponent {
     constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
         if (localStorage.getItem('currentUser')) {
             this.isLoggedIn = true;
+            this.authService.isLoggedIn = true;
         }
     }
 
