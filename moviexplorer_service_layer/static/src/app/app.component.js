@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var ng2_bs3_modal_1 = require("ng2-bs3-modal/ng2-bs3-modal");
 var router_1 = require("@angular/router");
@@ -183,8 +184,10 @@ AppComponent = __decorate([
         moduleId: module.id,
         selector: 'app-cmp',
         templateUrl: 'app.component.html',
-        providers: [movie_service_1.MovieService, auth_service_1.AuthService]
-    }),
+        providers: [movie_service_1.MovieService]
+    })
+    // TODO Seperate AppComponent. (into LoginComponent and RegisterComponent)
+    ,
     __metadata("design:paramtypes", [auth_service_1.AuthService, router_1.Router, forms_1.FormBuilder])
 ], AppComponent);
 exports.AppComponent = AppComponent;

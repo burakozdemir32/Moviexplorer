@@ -9,7 +9,7 @@ import {FormBuilder, FormGroup, Validators, AbstractControl} from '@angular/form
     moduleId: module.id,
     selector: 'app-cmp',
     templateUrl: 'app.component.html',
-    providers: [ MovieService, AuthService ]
+    providers: [ MovieService ]
 })
 
 // TODO Seperate AppComponent. (into LoginComponent and RegisterComponent)
@@ -110,8 +110,7 @@ export class AppComponent {
             }, error => {
                 if (error.hasOwnProperty('email')) {
                     console.log(error.email[0]);
-                }
-                else if (error.hasOwnProperty('email') && error.hasOwnProperty('username')) {
+                } else if (error.hasOwnProperty('email') && error.hasOwnProperty('username')) {
                     console.log(error.email[0]);
                     console.log(error.username[0]);
                 } else {

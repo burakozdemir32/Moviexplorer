@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MovieService } from '../services/movie.service';
+import { AuthService } from '../services/auth.service';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 
 @Component({
@@ -10,7 +11,7 @@ import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 export class MovieComponent  {
     movieSearchResults: Array<Object>;
 
-    constructor(private movieService: MovieService, private slimLoader: SlimLoadingBarService) {
+    constructor(private movieService: MovieService, public authService: AuthService, private slimLoader: SlimLoadingBarService) {
 
     }
 

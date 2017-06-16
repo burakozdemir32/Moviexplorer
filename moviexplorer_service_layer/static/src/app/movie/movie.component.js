@@ -10,10 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var movie_service_1 = require("../services/movie.service");
+var auth_service_1 = require("../services/auth.service");
 var ng2_slim_loading_bar_1 = require("ng2-slim-loading-bar");
 var MovieComponent = (function () {
-    function MovieComponent(movieService, slimLoader) {
+    function MovieComponent(movieService, authService, slimLoader) {
         this.movieService = movieService;
+        this.authService = authService;
         this.slimLoader = slimLoader;
     }
     MovieComponent.prototype.searchMovie = function (title) {
@@ -30,7 +32,7 @@ MovieComponent = __decorate([
         selector: 'movie-cmp',
         templateUrl: 'movie.component.html'
     }),
-    __metadata("design:paramtypes", [movie_service_1.MovieService, ng2_slim_loading_bar_1.SlimLoadingBarService])
+    __metadata("design:paramtypes", [movie_service_1.MovieService, auth_service_1.AuthService, ng2_slim_loading_bar_1.SlimLoadingBarService])
 ], MovieComponent);
 exports.MovieComponent = MovieComponent;
 //# sourceMappingURL=movie.component.js.map

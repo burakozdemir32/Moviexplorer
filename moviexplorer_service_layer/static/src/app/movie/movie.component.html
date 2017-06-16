@@ -32,7 +32,7 @@
                         <span class="list-meta-item"><i class="fa rating-icon mc-icon"></i> {{movie.metascore || "N/A"}}</span>
                     </span>
                     <p class="movie-overview">{{movie.movie.overview | truncate : 300}} </p>
-                    <rating-cmp [movie_id]="movie.movie.id"></rating-cmp>
+                    <rating-cmp *ngIf="authService.isLoggedIn" [movie_id]="movie.movie.id"></rating-cmp>
                 </div>
             </div>
         </div>
