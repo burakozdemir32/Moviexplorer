@@ -39,7 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('username', 'password', 'email')
+        fields = '__all__'
 
 
 class UserRatingsSerializer(serializers.ModelSerializer):
@@ -49,6 +49,7 @@ class UserRatingsSerializer(serializers.ModelSerializer):
             rating=validated_data['rating'],
             movie=validated_data['movie']
         )
+
         user_rating.save()
         return user_rating
 

@@ -96,11 +96,6 @@ class UserRatings(models.Model):
     class Meta:
         unique_together = ('user_id', 'movie',)
 
-    def __str__(self):
-        return 'User Id: {}, Movie: {}, Rating: {]'.format(
-            self.user_id, self.movie, self.rating
-        )
-
 
 class Recommendations(models.Model):
     user_id = models.IntegerField()

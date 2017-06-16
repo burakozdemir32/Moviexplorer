@@ -1,12 +1,11 @@
-from .models import MovieRatings, Recommendations
+from .models import MovieRatings, Recommendations, UserRatings
 from .serializers import MovieRatingsSerializer, UserSerializer, UserRatingsSerializer
 
 from django.contrib.auth import get_user_model
 
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions, status
 from rest_framework_jsonp.renderers import JSONPRenderer
-from rest_framework import permissions
-
+from rest_framework.response import Response
 
 class MovieSearchView(viewsets.ReadOnlyModelViewSet):
     """
@@ -41,12 +40,23 @@ class CreateUserView(viewsets.generics.CreateAPIView):
     model = get_user_model()
 
 
-class UserRatingsView(viewsets.ModelViewSet):
+class UserRatingsView(viewsets.generics.CreateAPIView):
+    """
+    This endpoint allows users to rate movies.
+    """
     permission_classes = (permissions.AllowAny,)
     serializer_class = UserRatingsSerializer
+    model = UserRatings
 
-    def get_queryset(self):
-        return []
+    def create(self, request, *args, **kwargs):
+        user_id = get_user_model().objects.get(username=request.data['username']).id
+        data = {'user_id': user_id, 'rating': request.data['rating'], 'movie': request.data['movie']}
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        rating_id = UserRatings.objects.get(id=serializer.instance.id)
+        return Response({'id': rating_id}, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class MovieRecommendationView(viewsets.ReadOnlyModelViewSet):

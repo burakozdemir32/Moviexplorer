@@ -29,11 +29,11 @@ schema_view = get_schema_view(title='Moviexplorer API')
 router = routers.DefaultRouter()
 router.register(r'movies', MovieSearchView, base_name='movies')
 router.register(r'recommendations', MovieRecommendationView, base_name='recommendations')
-router.register(r'rate', UserRatingsView, base_name='rate')
 
 urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'^api/register/$', CreateUserView.as_view()),
+    url(r'^api/rate/$', UserRatingsView.as_view()),
     url(r'^admin/', admin.site.urls),
     url(r'^api/schema/$', schema_view),
     url(r'^api/token/auth/', obtain_jwt_token),
